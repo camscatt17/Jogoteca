@@ -11,6 +11,16 @@ jogo2 = Jogo('God of War', 'Hack n Slash', 'PS2')
 jogo3 = Jogo('Mortal Kombat', 'Luta', 'PS2')
 lista = [jogo1, jogo2, jogo3]
 
+class Usuario:
+    def __init__(self, nome, nickname, senha):
+        self.nome = nome
+        self.nickname = nickname
+        self.senha = senha
+
+usuario = Usuario("Camila Santos", "Mila", "camis")
+
+usuarios = {usuario.nickname : usuario}
+
 app = Flask(__name__)
 app.secret_key = 'camila'
 
@@ -39,11 +49,15 @@ def login():
 
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
-    if 'camila' == request.form['senha']:
-        session['usuario_logado'] = request.form['usuario']
-        flash('{} logado com sucesso!'.format(session['usuario_logado']))
-        proxima_pagina = request.form['proxima']
-        return redirect(proxima_pagina)
+    proxima_pagina = request.form['proxima']
+    if request.form['usuario'] in usuarios:
+        usuario = usuarios[request.form['usuario']]
+        if request.form['senha'] == usuario.senha:
+            session['usuario_logado'] = usuario.nickname
+            flash(usuario.nickname + 'logado com sucesso!')
+            if proxima_pagina == "None":
+                proxima_pagina = url_for('index')
+            return redirect(proxima_pagina)
     else:
         flash('Usuário não logado.')
         return redirect(url_for('login'))
