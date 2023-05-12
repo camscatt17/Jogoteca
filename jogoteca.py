@@ -23,19 +23,32 @@ usuario = Usuario("Camila Santos", "Mila", "camis")
 usuarios = {usuario.nickname : usuario}
 
 app = Flask(__name__)
-app.secret_key = 'camila'
+app.secret_key = 'alura'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = \
-    '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
-        SGBD = 'mysql+mysqlconnector',
-        usuario ='root',
-        senha = 'admin',
-        servidor = 'localhost',
-        database = 'jogoteca'
+app.config['MYSQL_DATABASE_CHARSET'] = 'utf8mb4'
+app.config['SQLALCHEMY_DATABASE_URI'] = '{SGBD}://{usuario}:{senha}@{servidor}/{database}'.format(
+        SGBD='mysql+mysqlconnector',
+        usuario='root',
+        senha='Proxed64#',
+        servidor='localhost',
+        database='jogoteca'
     )
 
 db = SQLAlchemy(app)
 
+class Jogos(db.Model):
+    id = db.Column(db.Integer, primary_Key=True)
+    nome = db.Column(db.String(50), nullable=False)
+    categoria = db.Column(db.String(40), nullable=False)
+    console = db.Column(db.String(20), nullable=False)
+    def __repr__(self):
+        return '<Name %r' % self.name
+class Usuarios(db.Model):
+    nickname = db.Column(db.String(8), primary_Key=True)
+    nome = db.Column(db.String(20), nullable=False)
+    senha = db.Column(db.String(100), nullable=False)
+    def __repr__(self):
+        return '<Name %r' % self.name
 @app.route('/')
 def index():
     return render_template('lista.html', titulo='Jogos', jogos=lista)

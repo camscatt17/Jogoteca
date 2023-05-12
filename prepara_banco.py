@@ -3,7 +3,6 @@ import mysql.connector
 from mysql.connector import errorcode
 
 import os
-from dotenv import load_dotenv
 
 # Carrega as variáveis
 dotenv.load_dotenv(dotenv.find_dotenv())
