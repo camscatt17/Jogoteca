@@ -26,7 +26,13 @@ def criar():
     novo_jogo = Jogos(nome=nome, categoria=categoria, console=console)
     db.session.add(novo_jogo)
     db.session.commit()
+
+    arquivo = request.files['arquivo']
+    upload_path = app.config['UPLOAD_PATH']
+    arquivo.save(f'{upload_path}/capa{novo_jogo.id}.jpg')
+
     return redirect(url_for('index'))
+
 @app.route('/editar/<int:id>')
 def editar(id):
     if 'usuario_logado' not in session or session['usuario_logado'] == None:
@@ -53,7 +59,6 @@ def deletar(id):
     flash('Jogo deletado com sucesso!')
 
     return redirect(url_for('index'))
-
 
 @app.route('/login')
 def login():
